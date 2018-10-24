@@ -74,15 +74,62 @@ for (i in 1:5000) {
  
     a. the probability that you have "busted" (lost all your money) by the time you have placed your one hundredth bet. 
     
+    ```{r}
+probability_busted_100 <- length(which(durations <= 100))/length(durations)
+probability_busted_100
+```
 
     b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. 
     
+    ```{r}
+probability_busted_500 <- length(which(durations <= 500))/length(durations)
+probability_busted_500
+```
     
     c. the mean time you go bust, given that you go bust within the first 5000 hands.
     
+    ```{r}
+#Take the mean of the values for which durations is less than or equal to 5000
+mean_probability_busted_5000 <- mean(durations[which(durations <= 5000)])
+mean_probability_busted_5000
+```
     
     d. the mean and variance of your bankroll after 100 hands (including busts).
-    
+
+```{r}
+  gamblers_ruin_100 <- function(bankroll, bet, prob) {
+    duration <- 0
+    while (bet > 0) {
+      outcome <- rbinom(1, 1, prob)
+      if (outcome == 1) {
+        bankroll = bankroll + bet
+        bet = (bet + bankroll)*0.1
+      }
+      else {
+        bankroll = bankroll - bet
+      }
+      duration = duration + 1
+      #Break if there have been 100 hands
+      if (duration == 100) {
+        break
+      }
+      if (bankroll < bet) {
+        break
+      }
+    }
+    #Returns bankroll for each iteration
+    return(bankroll)
+}
+
+durations100 <- numeric()
+for (i in 1:5000) {
+    duration100 <- gamblers_ruin_100(900, 100, 0.5)
+    durations100 <- c(durations100, duration100)
+}
+
+mean(durations100)
+var(durations100)
+```
     
     e. the mean and variance of your bankroll after 500 hands (including busts).
  
