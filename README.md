@@ -1,3 +1,8 @@
+1. Erin Bugbee
+2. Amy Liu
+3. Sarah Fringer
+
+
 # Continuing Simulations
 
 
